@@ -14,6 +14,6 @@ RUN set -x \
   && rm php.tar.bz2* \
   && cd /usr/src/php \
   && ./buildconf --force \
-  && ./configure --disable-cgi --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql --with-mysqli --with-pdo-mysql
+  && ./configure --disable-cgi --with-mysql --with-mysqli --with-pdo-mysql
 
 # We are now back with php sources as should to build additional extensions. The image will be a bit huge, but it's not a problem when we need to support old applications.
