@@ -24,6 +24,6 @@ RUN git clone -b phalcon-v1.3.4 https://github.com/phalcon/cphalcon.git
 WORKDIR /usr/local/src/cphalcon/build
 
 RUN ./install \
-    && echo "extension=phalcon.so" > /usr/local/lib/php.ini
+    && echo "extension=phalcon.so" >> /usr/local/lib/php.ini
 
 # Where now to?
