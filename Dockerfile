@@ -1,22 +1,10 @@
-FROM php:7.1.9-fpm
-RUN apt-get update; \
-  fetchDeps=' \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libmcrypt-dev \
-    libpng12-dev \
-		libpq-dev \
-  '; \
-  apt-get install -y --no-install-recommends $fetchDeps; \
-  rm -rf /var/lib/apt/lists/*; \
-  docker-php-ext-install -j$(nproc) iconv mbstring mcrypt; \
-  docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/; \
-  docker-php-ext-install -j$(nproc) gd mbstring opcache pdo pdo_mysql zip; \
-  pecl install redis-3.1.3; \
-  pecl install apcu-5.1.8; \
-  pecl install xdebug-2.5.5; \
-  docker-php-ext-enable redis apcu xdebug
+FROM php:8.1.31-fpm-alpine
 
-ADD php.ini /usr/local/etc/php/php.ini
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-WORKDIR /app
+RUN install-php-extensions @composer-2.2.25
+
+RUN install-php-extensions amqp apcu bcmath exif gd gettext intl opcache pcntl pdo_mysql redis soap zip
+
+COPY php.ini /usr/local/etc/php/php.ini
+COPY www.conf /usr/local/etc/php-fpm.d/www.conf
